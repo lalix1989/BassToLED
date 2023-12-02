@@ -1,0 +1,88 @@
+#include <FastLED.h>
+#define NUM_LEDS 144
+#define DATA_PIN 7
+
+CRGBArray<NUM_LEDS> leds;
+
+// these constants won't change:
+const int ledPin = 13;      // LED connected to digital pin 13
+const int knockSensor = A0; // the piezo is connected to analog pin 0
+const int threshold = 100;  // threshold value to decide when the detected sound is a knock or not
+
+
+// these variables will change:
+int i = 0;
+int sensorReading = 0;
+int prevReading = 0; // variable to store the value read from the sensor pin
+int ledState = LOW;         // variable used to store the last LED status, to toggle the light
+int r = 255;
+int g = 0;
+int b = 0;
+
+void setup() {
+  pinMode(ledPin, OUTPUT); // declare the ledPin as as OUTPUT
+  Serial.begin(9600);       // use the serial port
+  FastLED.addLeds<WS2812, DATA_PIN>(leds, NUM_LEDS);
+}
+
+void loop() {
+  // read the sensor and store it in the variable sensorReading:
+  sensorReading = analogRead(knockSensor);
+  Serial.println(sensorReading - prevReading);
+  
+  if(sensorReading - prevReading > 40) {
+    leds[7] = CRGB(g, r, b);
+    
+  }
+
+  if(sensorReading - prevReading > 80) {
+    leds[6] = CRGB(g, r, b);
+    leds[8] = CRGB(g, r, b);
+  }
+  
+  if(sensorReading - prevReading > 120) {
+    leds[5] = CRGB(g, r, b);
+    leds[9] = CRGB(g, r, b);
+  }
+
+  if(sensorReading - prevReading > 160) {
+    leds[4] = CRGB(g, r, b);
+    leds[10] = CRGB(g, r, b);
+  }
+
+  if(sensorReading - prevReading > 200) {
+    leds[3] = CRGB(g, r, b);
+    leds[11] = CRGB(g, r, b);
+  }
+
+  if(sensorReading - prevReading > 240) {
+    leds[2] = CRGB(g, r, b);
+    leds[12] = CRGB(g, r, b);
+  }
+
+  if(sensorReading - prevReading > 280) {
+    leds[1] = CRGB(g, r, b);
+    leds[13] = CRGB(g, r, b);
+  }
+
+  if(sensorReading - prevReading > 320) {
+    leds[0] = CRGB(g, r, b);
+    leds[14] = CRGB(g, r, b);
+  }
+  
+  /*
+  if(sensorReading - prevReading < 5) {
+    for(i = 0; i <= 14; i++) {
+      leds[i] = CRGB(0, 0, 0);
+    }
+  }
+  */
+
+  FastLED.delay(1);
+  
+  
+  leds.fadeToBlackBy(20);
+  
+  prevReading = sensorReading;
+  //delay(5);  // delay to avoid overloading the serial port buffer
+}
